@@ -51,7 +51,7 @@ function botUtils() {
 		  const fileId = ctx.message.photo.pop().file_id
 		  ctx.telegram.getFileLink(fileId).then(url => {    
 			  axios({url, responseType: 'stream'}).then(response => {
-				  return new Promise((resolve, reject) => {
+				  return new Promise(() => {
 					  response.data.pipe(fs.createWriteStream(`photos/${ctx.update.message.from.id}.jpg`))
 								  .on('finish', () => console.log("Succsess"))
 								  .on('error', e => console.log(e))
