@@ -1,8 +1,13 @@
 import { NowRequest, NowResponse } from "@vercel/node";
-import Telegraf, { Context as TelegrafContext, Extra } from "telegraf";
+import Telegraf, { Context as TelegrafContext, Extra } from "telegraf"
 import { ExtraReplyMessage } from "telegraf/typings/telegram-types";
 import { about, greeting } from "..";
 import { ok } from "./responses";
+import * as fs from 'node:fs';
+import cron from 'cron';
+import axios from 'axios';
+const Input = require('telegraf')
+
 
 const debug = require("debug")("lib:telegram");
 
@@ -23,6 +28,37 @@ function botUtils() {
 	});
 
 	bot.command("about", about()).on("text", greeting());
+
+	cron.schedule(
+		"00 19 * * *",
+		async () => {
+		  var files = fs.readdirSync('./photos/');
+		  const randomFile = "photos/" + files.pop();
+		  await bot.telegram.sendPhoto(
+			"-1001739837583",
+			Input.fromLocalFile(randomFile)
+		  );
+		  fs.unlinkSync(randomFile);
+		},
+		{
+		  scheduled: true,
+		  timezone: "Europe/Kiev",
+		}
+	  );
+	
+	
+	bot.on("message", (ctx) => {
+		  const fileId = ctx.message.photo.pop().file_id
+		  ctx.telegram.getFileLink(fileId).then(url => {    
+			  axios({url, responseType: 'stream'}).then(response => {
+				  return new Promise((resolve, reject) => {
+					  response.data.pipe(fs.createWriteStream(`photos/${ctx.update.message.from.id}.jpg`))
+								  .on('finish', () => console.log("Succsess"))
+								  .on('error', e => console.log(e))
+						  });
+					  })
+		  })
+	});
 }
 
 async function localBot() {
