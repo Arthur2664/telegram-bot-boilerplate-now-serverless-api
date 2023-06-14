@@ -4,11 +4,9 @@ import { ExtraReplyMessage } from "telegraf/typings/telegram-types";
 import { about, greeting } from "..";
 import { ok } from "./responses";
 import * as fs from 'node:fs';
-import cron from 'cron';
-import axios from 'axios';
 const Input = require('telegraf')
-
-
+const cron = require('cron');
+const axios = require('axios');
 const debug = require("debug")("lib:telegram");
 
 const isDev = process.env.DEV;
