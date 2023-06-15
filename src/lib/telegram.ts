@@ -107,8 +107,7 @@ export async function useWebhook(req: NowRequest, res: NowResponse) {
 		console.log("req.body", req.body);
 
 		if (req.method === "POST") {
-			await bot.launch();
-			//await bot.handleUpdate(req.body, res);
+			await bot.handleUpdate(req.body, res);
 		} else {
 			ok(res, "Listening to bot events...");
 		}
