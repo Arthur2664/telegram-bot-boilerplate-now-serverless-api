@@ -96,6 +96,7 @@ export async function useWebhook(req: NowRequest, res: NowResponse) {
 			debug(`deleting webhook`);
 			await bot.telegram.deleteWebhook();
 			debug(`setting webhook to ${VERCEL_URL}/api`);
+			console.log(`setting webhook to ${VERCEL_URL}/api`);
 			await bot.telegram.setWebhook(`${VERCEL_URL}/api`);
 		}
 
@@ -107,6 +108,7 @@ export async function useWebhook(req: NowRequest, res: NowResponse) {
 		console.log("req.body", req.body);
 
 		if (req.method === "POST") {
+
 			await bot.handleUpdate(req.body, res);
 		} else {
 			ok(res, "Listening to bot events...");
