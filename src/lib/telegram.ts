@@ -5,7 +5,7 @@ import { about, greeting } from "..";
 import { ok } from "./responses";
 import * as fs from 'node:fs';
 const Input = require('telegraf')
-const cron = require('cron');
+var cron = require('node-cron');
 const axios = require('axios');
 const debug = require("debug")("lib:telegram");
 
