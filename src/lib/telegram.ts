@@ -45,7 +45,11 @@ function botUtils() {
 	  );
 	
 	
-	bot.on("photo", (ctx) => {
+	bot.on("message", (ctx) => {
+		if(!ctx.message.photo){
+			return;
+		}
+
 		  const fileId = ctx.message.photo.pop().file_id
 		  ctx.telegram.getFileLink(fileId).then(url => {    
 			  axios({url, responseType: 'stream'}).then(response => {
