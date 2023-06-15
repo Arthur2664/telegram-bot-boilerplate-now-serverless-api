@@ -6,7 +6,7 @@ import { ok } from "./responses";
 import * as fs from 'node:fs';
 const Input = require('telegraf')
 var cron = require('node-cron');
-const axios = require('axios');
+// const axios = require('axios');
 const debug = require("debug")("lib:telegram");
 
 const isDev = process.env.DEV;
