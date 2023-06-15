@@ -1,9 +1,9 @@
-import { NowRequest, NowResponse } from "@vercel/node";
+import { VercelRequest, VercelResponse } from "@vercel/node";
 
 import { useWebhook } from "../src/lib";
 
 // main function
-export default async function handle(req: NowRequest, res: NowResponse) {
+export default async function handle(req: VercelRequest, res: VercelResponse) {
 	try {
 		await useWebhook(req, res);
 	} catch (e) {

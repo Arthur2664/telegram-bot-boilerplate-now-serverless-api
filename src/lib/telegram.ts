@@ -1,4 +1,4 @@
-import { NowRequest, NowResponse } from "@vercel/node";
+import { VercelRequest, VercelResponse } from "@vercel/node";
 import Telegraf, { Context as TelegrafContext, Extra } from "telegraf"
 import { ExtraReplyMessage } from "telegraf/typings/telegram-types";
 import { about, greeting } from "..";
@@ -45,22 +45,22 @@ function botUtils() {
 	  );
 	
 	
-	bot.on("message", (ctx) => {
-		if(!ctx.message.photo){
-			return;
-		}
+	// bot.on("message", (ctx) => {
+	// 	if(!ctx.message.photo){
+	// 		return;
+	// 	}
 
-		  const fileId = ctx.message.photo.pop().file_id
-		  ctx.telegram.getFileLink(fileId).then(url => {    
-			  axios({url, responseType: 'stream'}).then(response => {
-				  return new Promise(() => {
-					  response.data.pipe(fs.createWriteStream(`photos/${ctx.update.message.from.id}.jpg`))
-								  .on('finish', () => console.log("Succsess"))
-								  .on('error', e => console.log(e))
-						  });
-					  })
-		  })
-	});
+	// 	  const fileId = ctx.message.photo.pop().file_id
+	// 	  ctx.telegram.getFileLink(fileId).then(url => {    
+	// 		  axios({url, responseType: 'stream'}).then(response => {
+	// 			  return new Promise(() => {
+	// 				  response.data.pipe(fs.createWriteStream(`photos/${ctx.update.message.from.id}.jpg`))
+	// 							  .on('finish', () => console.log("Succsess"))
+	// 							  .on('error', e => console.log(e))
+	// 					  });
+	// 				  })
+	// 	  })
+	// });
 }
 
 async function localBot() {
@@ -80,7 +80,7 @@ async function localBot() {
 	await bot.launch();
 }
 
-export async function useWebhook(req: NowRequest, res: NowResponse) {
+export async function useWebhook(req: VercelRequest, res: VercelResponse) {
 	try {
 		if (!isDev && !VERCEL_URL) {
 			throw new Error("VERCEL_URL is not set.");
@@ -108,7 +108,6 @@ export async function useWebhook(req: NowRequest, res: NowResponse) {
 		console.log("req.body", req.body);
 
 		if (req.method === "POST") {
-
 			await bot.handleUpdate(req.body, res);
 		} else {
 			ok(res, "Listening to bot events...");
